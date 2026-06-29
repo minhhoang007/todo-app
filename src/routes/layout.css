@@ -1,1 +1,5 @@
 @import 'tailwindcss';
+
+/* Override dark mode to use a CSS class instead of the system preference.
+   When a <div class="dark"> (or any ancestor) is present, dark: classes activate. */
+@variant dark (&:where(.dark, .dark *));

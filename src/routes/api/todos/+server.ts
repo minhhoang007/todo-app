@@ -8,15 +8,15 @@ export const GET: RequestHandler = () => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-	const { title, category = 'general' } = await request.json();
+	const { title, category = 'general', priority = 'medium', due_date = null } = await request.json();
 
 	if (!title || title.trim() === '') {
 		return json({ error: 'Title cannot be empty' }, { status: 400 });
 	}
 
 	const result = db
-		.prepare('INSERT INTO todos (title, category) VALUES (?, ?)')
-		.run(title.trim(), category);
+		.prepare('INSERT INTO todos (title, category, priority, due_date) VALUES (?, ?, ?, ?)')
+		.run(title.trim(), category, priority, due_date);
 
 	const newTodo = db.prepare('SELECT * FROM todos WHERE id = ?').get(result.lastInsertRowid);
 	return json(newTodo, { status: 201 });
